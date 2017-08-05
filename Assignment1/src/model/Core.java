@@ -95,6 +95,20 @@ public class Core {
 	
 	}
 	
+	public static int getStockTrans(String TransactionNO,String ItemID){
+		
+		int result = 0;
+		try{ 
+			Statement stmt=con.createStatement();  
+			ResultSet rs=stmt.executeQuery("Select sum(qty) From ba_stock Where ItemID = '"+ ItemID +"' And TransactionNO != '" + TransactionNO + "' ");  
+			while(rs.next())  {
+				result+=rs.getInt(1);
+			}
+		}catch(Exception e){JOptionPane.showMessageDialog(null, e, "Abort", JOptionPane.WARNING_MESSAGE);}  
+		
+		return result;
+	}
+	
 	public void FillTable(JTable table, String Query)
 	{
 	    try
