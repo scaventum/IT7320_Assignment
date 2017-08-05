@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,34 +9,20 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JLabel;
 import javax.swing.JButton;
-import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import model.Core;
+
 import javax.swing.JSeparator;
 
-public class Stock {
+public class Stock extends Core{
 
 	JFrame frmStock;
-	private JTextField tfItemID;
-	private JTextField tdSupplierID;
+	JTextField tfItemID;
+	JTextField tdSupplierID;
 	private JTable table;
 	private JScrollPane scrollPane;
-
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Stock window = new Stock();
-					window.frmStock.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
 
 	/**
 	 * Create the application.
@@ -91,17 +76,14 @@ public class Stock {
 		scrollPane.setViewportView(table);
 		table.setEnabled(false);
 		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-					"Supplier ID","Supplier Name","Item ID", "Item Name", "Qty"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, Double.class, Double.class, Double.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
+			new Object[][] {},
+			new String[] {"Supplier ID","Supplier Name","Item ID", "Item Name", "Qty"}
+		) 
+			{
+				private static final long serialVersionUID = 1L;
+				boolean[] columnEditables = new boolean[] {false, false, false, false, true, false};
+				public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
 			}
 		});
 		table.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));

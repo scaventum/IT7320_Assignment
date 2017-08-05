@@ -504,12 +504,15 @@ public class GR extends Core{
 	
 	public boolean isEditDelete(){
 		boolean result=true;
-		/*String Message="";
-		if(Core.getRecordNumber("Select 1 From tr_gr_hd a Where a.PONO = '"+ tfPONO.getText() +"'")>0){
-			result=false;
-			Message="PO No. "+ tfPONO.getText() +" already has GR";
+		String Message="";
+		TableModel model = tblDetail.getModel();
+		for(int i=0;i<model.getRowCount();i++){
+			if(Core.getStockTrans(tfGRNO.getText(),model.getValueAt(i, 0).toString())<0){
+				result=false;
+				Message="Invalid stock qty for Item ID "+ model.getValueAt(i, 0).toString() +" if GR is deleted";
+			}
 		}
-		if(!result)JOptionPane.showMessageDialog(null, Message, "Abort", JOptionPane.WARNING_MESSAGE);*/
+		if(!result)JOptionPane.showMessageDialog(null, Message, "Abort", JOptionPane.WARNING_MESSAGE);
 		return result;
 	}
 }
