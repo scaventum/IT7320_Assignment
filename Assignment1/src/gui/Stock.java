@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,6 +11,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import model.Core;
@@ -20,7 +22,7 @@ public class Stock extends Core{
 
 	JFrame frmStock;
 	JTextField tfItemID;
-	JTextField tdSupplierID;
+	JTextField tfSupplierID;
 	private JTable table;
 	private JScrollPane scrollPane;
 
@@ -35,6 +37,11 @@ public class Stock extends Core{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize(String[] Session) {
+		DefaultTableCellRenderer readonly = new DefaultTableCellRenderer();
+		DefaultTableCellRenderer editable = new DefaultTableCellRenderer();
+		readonly.setBackground(new Color(224, 224, 224));
+		editable.setBackground(new Color(255, 255, 255));
+		
 		frmStock = new JFrame();
 		frmStock.setTitle("Stock");
 		frmStock.setResizable(false);
@@ -55,19 +62,6 @@ public class Stock extends Core{
 		btnItemID.setBounds(240, 58, 23, 23);
 		frmStock.getContentPane().add(btnItemID);
 		
-		tdSupplierID = new JTextField();
-		tdSupplierID.setColumns(10);
-		tdSupplierID.setBounds(366, 58, 135, 20);
-		frmStock.getContentPane().add(tdSupplierID);
-		
-		JButton btnSupplierID = new JButton("...");
-		btnSupplierID.setBounds(511, 58, 23, 23);
-		frmStock.getContentPane().add(btnSupplierID);
-		
-		JLabel lblSupplierId = new JLabel("Supplier ID");
-		lblSupplierId.setBounds(281, 62, 75, 14);
-		frmStock.getContentPane().add(lblSupplierId);
-		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 89, 524, 322);
 		frmStock.getContentPane().add(scrollPane);
@@ -77,7 +71,7 @@ public class Stock extends Core{
 		table.setEnabled(false);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {},
-			new String[] {"Supplier ID","Supplier Name","Item ID", "Item Name", "Qty"}
+			new String[] {"Item ID", "Item Name", "Qty"}
 		) 
 			{
 				private static final long serialVersionUID = 1L;
@@ -87,6 +81,10 @@ public class Stock extends Core{
 			}
 		});
 		table.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
+		table.getColumnModel().getColumn(0).setCellRenderer(readonly);
+		table.getColumnModel().getColumn(1).setCellRenderer(readonly);
+		table.getColumnModel().getColumn(2).setCellRenderer(readonly);
+		showData();
 		
 		JButton button = new JButton("Delete");
 		button.setEnabled(false);
@@ -122,5 +120,35 @@ public class Stock extends Core{
 		JSeparator separator = new JSeparator();
 		separator.setBounds(10, 45, 524, 2);
 		frmStock.getContentPane().add(separator);
+		
+		btnItemID.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Browser navigate = new Browser("Select a.ItemID,a.Name From ms_item a",tfItemID);
+				navigate.frmBrowser.setVisible(true);
+			}
+		});
+		
+		tfItemID.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showData();
+			}
+		});
+	}
+	
+	public void showData(){
+		String strCondition="";
+		if(!tfItemID.getText().equals("")) {
+			strCondition=" And a.ItemID = '" + tfItemID.getText() + "' ";
+		}
+		String strSql = "Select a.ItemID,b.Name,Sum(a.Qty) as Qty From ba_stock a "
+			      + "Inner Join ms_item b On b.ItemID = a.ItemID "
+			      + "Where 1=1 "
+			      + " " + strCondition + " "
+			      + "Group By a.ItemID,b.Name "
+				  + "Order By a.ItemID Asc";
+
+	  // It creates and displays the table
+		FillTable(table, strSql);
+		table.setEnabled(false);
 	}
 }
