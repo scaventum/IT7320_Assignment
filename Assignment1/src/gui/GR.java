@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -238,7 +241,7 @@ public class GR extends Core{
 						      + "a.Qty-ifnull((Select sum(k.Qty) From tr_gr_hd j "
 		                      + "              Inner Join tr_gr_dt k On k.GRNO = j.GRNO  "
 		                      + "              Where j.PONO = a.PONO And k.ItemID = a.ItemID),0),"
-						      + "0,(a.RetailPrice*a.Qty) as Price "
+						      + "0,0 as Price "
 	                          + "From tr_po_dt a "
 	                          + "Inner Join ms_item b On b.ItemID=a.ItemID "
 	                          + "Where a.PONO = '"+ tfPONO.getText() +"' Order By a.ItemID Asc";
@@ -500,7 +503,44 @@ public class GR extends Core{
 			}
 		});
 		
+		tblDetail.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				setTableModelListener();
+			}
+		});
 	}
+	
+	private void setTableModelListener() {
+        TableModel model = tblDetail.getModel();
+		TableModelListener tableModelListener = new TableModelListener() {
+
+            @Override
+            public void tableChanged(TableModelEvent e) {
+
+                if (e.getType() == TableModelEvent.UPDATE) {
+                    
+                    int row = e.getFirstRow();
+                    int quantity = Integer.parseInt(model.getValueAt(row, 4).toString());
+                    int price = Integer.parseInt(model.getValueAt(row, 2).toString());
+                    int value = quantity * price;
+                    
+                    if(Integer.parseInt(model.getValueAt(row, 5).toString())!=value) {
+                    	model.setValueAt(value, row, 5);
+                    }
+                    int totalPrice=0;
+                	for(int i=0;i<model.getRowCount();i++){
+                		totalPrice+=Integer.parseInt(model.getValueAt(i, 5).toString());
+                	}
+                	
+                	DecimalFormat formatter = new DecimalFormat("#,###");
+                	tfGrandTotal.setText(formatter.format(totalPrice)+"");
+                }
+               
+            }
+        };
+        model.addTableModelListener(tableModelListener);
+    }
 	
 	public boolean isEditDelete(){
 		boolean result=true;
