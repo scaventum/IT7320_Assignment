@@ -86,13 +86,8 @@ public class Stock extends Core{
 		table.getColumnModel().getColumn(2).setCellRenderer(readonly);
 		showData();
 		
-		JButton button = new JButton("Delete");
-		button.setEnabled(false);
-		button.setBounds(330, 11, 80, 23);
-		frmStock.getContentPane().add(button);
-		
 		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(240, 11, 80, 23);
+		btnCancel.setBounds(10, 11, 80, 23);
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Menu navigate = new Menu(Session);
@@ -101,21 +96,6 @@ public class Stock extends Core{
 			}
 		});
 		frmStock.getContentPane().add(btnCancel);
-		
-		JButton button_2 = new JButton("Save");
-		button_2.setEnabled(false);
-		button_2.setBounds(150, 11, 80, 23);
-		frmStock.getContentPane().add(button_2);
-		
-		JButton button_3 = new JButton("Edit");
-		button_3.setEnabled(false);
-		button_3.setBounds(80, 11, 60, 23);
-		frmStock.getContentPane().add(button_3);
-		
-		JButton button_4 = new JButton("Add");
-		button_4.setEnabled(false);
-		button_4.setBounds(10, 11, 60, 23);
-		frmStock.getContentPane().add(button_4);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(10, 45, 524, 2);
