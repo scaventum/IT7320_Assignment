@@ -91,7 +91,7 @@ public class Menu extends Core{
 		frmMenu.getContentPane().add(btnPO);
 		
 		JButton btnGR = new JButton("Goods Receiving");
-		btnGR.setBounds(10, 266, 424, 23);
+
 		btnGR.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				GR navigate = new GR(Session);

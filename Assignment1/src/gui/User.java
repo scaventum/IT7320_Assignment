@@ -103,6 +103,7 @@ public class User extends Core {
 		frmUser.getContentPane().add(lblUsername);
 		
 		JButton btnUserID = new JButton("...");
+
 		btnUserID.setBounds(411, 58, 23, 23);
 		frmUser.getContentPane().add(btnUserID);
 		
