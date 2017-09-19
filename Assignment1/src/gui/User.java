@@ -46,7 +46,7 @@ public class User extends Core {
 		frmUser = new JFrame();
 		frmUser.setResizable(false);
 		frmUser.setTitle("User");
-		frmUser.setBounds(100, 100, 450, 170);
+		frmUser.setBounds(100, 100, 450, 227);
 		frmUser.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmUser.getContentPane().setLayout(null);
 		
@@ -78,7 +78,7 @@ public class User extends Core {
 		lblUserID.setBounds(10, 61, 100, 14);
 		frmUser.getContentPane().add(lblUserID);
 		
-		tfUserID = new JTextField();
+		tfUserID = 	new JTextField();
 		tfUserID.setColumns(10);
 		tfUserID.setBounds(134, 58, 267, 20);
 		frmUser.getContentPane().add(tfUserID);
